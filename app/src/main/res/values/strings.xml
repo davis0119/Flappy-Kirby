@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">simplegame</string>
+
+    <string name="play">Play</string>
+
+    <string name="thread">Thread</string>
+
+    <string name="zero">0</string>
+
+    <string name="new_game">New_Game</string>
+
+    <string name="leaderboard">Leaderboard</string>
+    <string name="player_name">simplegame</string>
+    <string name="score">Your Score: </string>
+    <string name="save">Save</string>
+</resources>
