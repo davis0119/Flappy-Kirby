@@ -27,11 +27,12 @@ class NewPlayerStat : AppCompatActivity() {
             val name = name.text.toString()
             val editor = pref.edit()
             if (allNames!!.isEmpty()) {
-                allNames += name
+                editor.putString("names", name)
             } else {
-                allNames += "|" + name
+                editor.putString("names", allNames + "|" + name)
+//                allNames += "|" + name
             }
-            editor.putString("names", allNames)
+//            editor.putString("names", allNames)
             // allow us to put things into our preference file
             editor.putString(name + "_score", score.text.toString())
             editor.apply()

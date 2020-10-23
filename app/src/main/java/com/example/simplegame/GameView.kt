@@ -18,16 +18,15 @@ class GameView(context: Context?, w: Float, h: Float) : View(context) {
 
     val wide = w
     val high = h
-    val anton = BitmapFactory.decodeResource(getResources(), R.drawable.antonn);
-    val quesadilla = BitmapFactory.decodeResource(getResources(), R.drawable.ques);
-
+    val kirby = BitmapFactory.decodeResource(getResources(), R.drawable.kirby_gif);
+    val quesadilla = BitmapFactory.decodeResource(getResources(), R.drawable.kirby);
     val paint = Paint()
 
     var playerX = wide/6
-    var playerY = 5*high/6
+    var playerY = 5*high/7
 
     var quesadillaX = wide
-    var quesadillaY = 5*high/6
+    var quesadillaY = 5*high/7
     var quesadillaSpeed = 4
 
     var frames = 0
@@ -44,7 +43,7 @@ class GameView(context: Context?, w: Float, h: Float) : View(context) {
 
                     if (checkCollision()) {
                         timer.cancel()
-                        val i = Intent(context, MainActivity::class.java)
+                        val i = Intent(context, NewPlayerStat::class.java)
                         context!!.startActivity(i)
                     }
                 })
@@ -64,7 +63,7 @@ class GameView(context: Context?, w: Float, h: Float) : View(context) {
         paint.setColor(Color.parseColor("#000000"));
 
         //canvas?.drawRect(playerX-40, playerY-40, playerX+40, playerY+40, paint)
-        canvas?.drawBitmap(anton, playerX-80, playerY-160, paint)
+        canvas?.drawBitmap(kirby, playerX-80, playerY-160, paint)
         paint.setColor(Color.parseColor("#f9a602"))
         canvas?.drawBitmap(quesadilla, quesadillaX-80, quesadillaY-160, paint)
         //canvas?.drawRect(quesadillaX-40, quesadillaY-40, quesadillaX+40, quesadillaY+40, paint)

@@ -25,18 +25,21 @@ class LeaderboardActivity : AppCompatActivity() {
 
         //adapter with click listener
         playerStat_recycler_view.adapter = PlayerStatAdapter(this, PLAYER_STATS) {
-            // do something when clicked
-                position ->
-            val intent = Intent(this, PlayerStatActivity::class.java)
-            intent.putExtra("name", PLAYER_STATS[position].name)
-            intent.putExtra("score", PLAYER_STATS[position].score)
-            startActivity(intent)
+//            // do something when clicked
+//            position ->
+//            val intent = Intent(this, PlayerStatActivity::class.java)
+//            intent.putExtra("name", PLAYER_STATS[position].name)
+//            intent.putExtra("score", PLAYER_STATS[position].score)
+//            startActivity(intent)
         }
 
         // new contact fab button
         new_playerstat.setOnClickListener {
             val intent = Intent(this, NewPlayerStat::class.java)
             startActivityForResult(intent, ADD_NEW_PLAYER_STAT)
+        }
+        reset.setOnClickListener {
+            clearLeaderboard()
         }
     }
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -52,21 +55,12 @@ class LeaderboardActivity : AppCompatActivity() {
                 playerStat_recycler_view.adapter?.notifyDataSetChanged()
                 Log.d("added new stat", name)
             }
-
         }
-    }
-    private fun addStatData() {
-        val angel = PlayerStat("Angel", "10000")
-        val davis = PlayerStat("Davis", "41")
-        val xuan = PlayerStat("Xuan", "42")
-
-        PLAYER_STATS.add(angel)
-        PLAYER_STATS.add(davis)
-        PLAYER_STATS.add(xuan)
-        for (i in 1..20) PLAYER_STATS.add(angel)
     }
     // function to get stuff from preferences, similar to getting values from intents
     private fun retrieveFromPreferences() {
+//        PLAYER_STATS.clear()
+
         val pref = this.getSharedPreferences("simplegame", Context.MODE_PRIVATE)
         val names = pref.getString("names", "")
         val score = pref.getString("score", "")
@@ -78,5 +72,12 @@ class LeaderboardActivity : AppCompatActivity() {
                 PLAYER_STATS.add(newContact)
             }
         }
+    }
+    private fun clearLeaderboard() {
+        val pref = this.getSharedPreferences("simplegame", Context.MODE_PRIVATE)
+        val editor = pref.edit()
+        editor.clear()
+        editor.apply()
+        finish()
     }
 }
