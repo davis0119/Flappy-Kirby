@@ -39,7 +39,9 @@ class LeaderboardActivity : AppCompatActivity() {
             startActivityForResult(intent, ADD_NEW_PLAYER_STAT)
         }
         reset.setOnClickListener {
-            clearLeaderboard()
+//            clearLeaderboard()
+            val i = Intent(this, ResetActivity::class.java)
+            startActivity(i)
         }
     }
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

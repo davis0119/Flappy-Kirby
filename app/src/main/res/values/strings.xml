@@ -10,7 +10,10 @@
     <string name="new_game">New_Game</string>
 
     <string name="leaderboard">Leaderboard</string>
-    <string name="player_name">simplegame</string>
+    <string name="player_name">Player Name</string>
     <string name="score">Your Score: </string>
     <string name="save">Save</string>
+    <string name="confirmation">To reset, type CONFIRM here and click CONFIRM</string>
+    <string name="confirm">Confirm</string>
+    <string name="back">Return</string>
 </resources>

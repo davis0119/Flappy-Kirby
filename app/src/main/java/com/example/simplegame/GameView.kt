@@ -19,19 +19,18 @@ class GameView(context: Context?, w: Float, h: Float) : View(context) {
     val wide = w
     val high = h
     val kirby = BitmapFactory.decodeResource(getResources(), R.drawable.kirby_gif);
-    val quesadilla = BitmapFactory.decodeResource(getResources(), R.drawable.kirby);
+    val metaknight = BitmapFactory.decodeResource(getResources(), R.drawable.metaknight);
     val paint = Paint()
-
+    // player x and y
     var playerX = wide/6
     var playerY = 5*high/7
-
-    var quesadillaX = wide
-    var quesadillaY = 5*high/7
-    var quesadillaSpeed = 4
-
-    var frames = 0
-
-    var diff = 0
+    // obstacle x and y
+    var metaknightX = wide
+    var metaknightY = 5*high/7
+    var metaknightSpeed = 4
+    // physics variables
+    var gravity = -1
+    var dy = 0
 
     init {
         timer = Timer()
@@ -40,7 +39,6 @@ class GameView(context: Context?, w: Float, h: Float) : View(context) {
             override fun run() {
                 timehandler.post(Runnable {
                     invalidate()
-
                     if (checkCollision()) {
                         timer.cancel()
                         val i = Intent(context, NewPlayerStat::class.java)
@@ -57,27 +55,26 @@ class GameView(context: Context?, w: Float, h: Float) : View(context) {
         timer.schedule(task, 1, 10)
     }
 
-
     override fun onDraw(canvas: Canvas?) {
         super.onDraw(canvas)
         paint.setColor(Color.parseColor("#000000"));
 
-        //canvas?.drawRect(playerX-40, playerY-40, playerX+40, playerY+40, paint)
         canvas?.drawBitmap(kirby, playerX-80, playerY-160, paint)
         paint.setColor(Color.parseColor("#f9a602"))
-        canvas?.drawBitmap(quesadilla, quesadillaX-80, quesadillaY-160, paint)
-        //canvas?.drawRect(quesadillaX-40, quesadillaY-40, quesadillaX+40, quesadillaY+40, paint)
-
-        quesadillaX -= quesadillaSpeed
-        if(frames > 0) {
-            playerY -= diff
-            diff -= 1
-            frames -= 1
+        canvas?.drawBitmap(metaknight, metaknightX-80, metaknightY-160, paint)
+        // metaknight is going to the left faster
+        metaknightX -= metaknightSpeed
+        // how should the player's y coordinate be changing?
+        playerY += dy
+        dy -= gravity
+        // prevent from going off screen below
+        if (playerY >= 5*high/7) {
+            playerY = 5 * high / 7
+            dy = 0
         }
-
-        if (quesadillaX < 0) {
-            quesadillaX = wide
-            quesadillaSpeed += 2
+        if (metaknightX < -1800) {
+            metaknightX = wide + 200
+            metaknightSpeed += 2
         }
 
     }
@@ -92,17 +89,14 @@ class GameView(context: Context?, w: Float, h: Float) : View(context) {
     }
 
     fun jump() {
-        if (frames == 0) {
-            frames = 61
-            diff = 30
-        }
+        dy = -20
     }
 
     fun checkCollision(): Boolean {
-        if ((playerY + 40 >= quesadillaY - 40)
-            && (playerY - 40 <= quesadillaY + 40)
-            && (playerX + 40 >= quesadillaX - 40)
-            && (playerX - 40 <= quesadillaX + 40)) {
+        if ((playerY + 40 >= metaknightY - 40)
+            && (playerY - 40 <= metaknightY + 40)
+            && (playerX + 40 >= metaknightX - 40)
+            && (playerX - 40 <= metaknightX + 40)) {
             return true
         }
         return false
