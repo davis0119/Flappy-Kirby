@@ -19,7 +19,7 @@ class ResetActivity : AppCompatActivity()  {
                 val editor = pref.edit()
                 editor.clear()
                 editor.apply()
-                val i = Intent(this, MainActivity::class.java)
+                val i = Intent(this, LeaderboardActivity::class.java)
                 startActivity(i)
             } else {
                 Toast.makeText(this@ResetActivity,

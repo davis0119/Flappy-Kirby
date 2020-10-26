@@ -18,19 +18,20 @@ class GameView(context: Context?, w: Float, h: Float) : View(context) {
 
     val wide = w
     val high = h
-    val kirby = BitmapFactory.decodeResource(getResources(), R.drawable.kirby_gif);
+    val kirby = BitmapFactory.decodeResource(getResources(), R.drawable.kirby_fly);
     val metaknight = BitmapFactory.decodeResource(getResources(), R.drawable.metaknight);
     val paint = Paint()
     // player x and y
     var playerX = wide/6
-    var playerY = 5*high/7
+    var playerY = 5*high/7 + 60
     // obstacle x and y
     var metaknightX = wide
-    var metaknightY = 5*high/7
-    var metaknightSpeed = 4
+    var metaknightY = 5*high/7 + 40
+    var metaknightSpeed = 7
     // physics variables
     var gravity = -1
     var dy = 0
+    var metady = 0
 
     init {
         timer = Timer()
@@ -66,17 +67,31 @@ class GameView(context: Context?, w: Float, h: Float) : View(context) {
         metaknightX -= metaknightSpeed
         // how should the player's y coordinate be changing?
         playerY += dy
-        dy -= gravity
+        dy -= 3 * gravity
+        metaknightY += metady
+        metady -= gravity
         // prevent from going off screen below
-        if (playerY >= 5*high/7) {
-            playerY = 5 * high / 7
+        if (playerY >= 5 * high / 7 + 60) {
+            playerY = 5 * high / 7 + 60
             dy = 0
         }
-        if (metaknightX < -1800) {
-            metaknightX = wide + 200
-            metaknightSpeed += 2
+        // prevent from going off screen below
+        if (playerY <= 100) {
+            playerY = 100F
         }
-
+        if (metaknightY >= 5 * high / 7 + 40) {
+            metaknightY = 5 * high / 7 + 40
+            metady = 0
+        }
+        if (metaknightY <= 150) {
+            metaknightY = 150F
+            metady = 3
+        }
+        if (metaknightX < -1500) {
+            metaknightX = wide + 100
+            metaknightY = 3000.random().toFloat()
+            metaknightSpeed += 3
+        }
     }
 
     override fun onTouchEvent(e: MotionEvent): Boolean {
@@ -89,14 +104,25 @@ class GameView(context: Context?, w: Float, h: Float) : View(context) {
     }
 
     fun jump() {
-        dy = -20
+        dy = -30
+        if (metady == 0) {
+            metady = -15;
+        } else {
+            metady -= 40.random()
+        }
     }
 
+    fun Int.random(): Int {
+        val x = (10..this).random()
+        return x
+    }
+
+
     fun checkCollision(): Boolean {
-        if ((playerY + 40 >= metaknightY - 40)
-            && (playerY - 40 <= metaknightY + 40)
-            && (playerX + 40 >= metaknightX - 40)
-            && (playerX - 40 <= metaknightX + 40)) {
+        if ((playerY + 200 >= metaknightY - 200)
+            && (playerY - 200 <= metaknightY + 200)
+            && (playerX + 200 >= metaknightX - 200)
+            && (playerX - 200 <= metaknightX + 200)) {
             return true
         }
         return false

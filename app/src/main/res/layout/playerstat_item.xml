@@ -11,6 +11,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
+        android:textSize="30dp"
+        android:textStyle="bold"
         tools:text="name"/>
     <TextView
         android:id="@+id/playerScore"

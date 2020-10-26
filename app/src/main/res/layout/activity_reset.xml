@@ -15,11 +15,13 @@
         android:id="@+id/confirm"
         android:layout_width="match_parent"
         android:layout_height="120dp"
-        android:text="@string/confirm" />
+        android:text="@string/confirm"
+        android:background="@color/prettyRed"/>
 
     <Button
         android:id="@+id/leaderboard"
         android:layout_width="match_parent"
         android:layout_height="120dp"
-        android:text="@string/back" />
+        android:text="@string/back"
+        android:background="@color/prettyGreen"/>
 </LinearLayout>

@@ -5,6 +5,9 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.activity_leaderboard.*
@@ -36,12 +39,28 @@ class LeaderboardActivity : AppCompatActivity() {
         // new contact fab button
         new_playerstat.setOnClickListener {
             val intent = Intent(this, NewPlayerStat::class.java)
-            startActivityForResult(intent, ADD_NEW_PLAYER_STAT)
+//            startActivityForResult(intent, ADD_NEW_PLAYER_STAT)
+            startActivity(intent)
         }
         reset.setOnClickListener {
 //            clearLeaderboard()
             val i = Intent(this, ResetActivity::class.java)
             startActivity(i)
+        }
+    }
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        val inflater = menuInflater
+        inflater.inflate(R.menu.menu, menu)
+        return true
+    }
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.getItemId()) {
+            R.id.new_game -> {
+                val it = Intent(this, MainActivity::class.java)
+                startActivity(it)
+                return true
+            }
+            else -> return super.onOptionsItemSelected(item)
         }
     }
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -54,6 +73,7 @@ class LeaderboardActivity : AppCompatActivity() {
             if (!name.isNullOrEmpty() && !score.isNullOrEmpty()) {
                 val stat = PlayerStat(name, score)
                 PLAYER_STATS.add(stat)
+                PLAYER_STATS.sortByDescending { stat -> stat.score.toInt() }
                 playerStat_recycler_view.adapter?.notifyDataSetChanged()
                 Log.d("added new stat", name)
             }
@@ -72,6 +92,10 @@ class LeaderboardActivity : AppCompatActivity() {
                 val score = pref.getString(name + "_score", "")
                 val newContact = PlayerStat(name, score!!)
                 PLAYER_STATS.add(newContact)
+                PLAYER_STATS.sortByDescending { stat -> stat.score.toInt() }
+                if (PLAYER_STATS.size > 7) {
+                    PLAYER_STATS.remove(PLAYER_STATS.get(7))
+                }
             }
         }
     }
