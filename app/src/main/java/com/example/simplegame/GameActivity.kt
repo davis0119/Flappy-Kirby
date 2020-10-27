@@ -1,13 +1,12 @@
 package com.example.simplegame
 
 import android.content.Intent
-import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.util.DisplayMetrics
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import kotlinx.android.synthetic.main.activity_game.*
 
 class GameActivity : AppCompatActivity() {
     var g : GameView? = null
@@ -20,6 +19,8 @@ class GameActivity : AppCompatActivity() {
         val w = displayMetrics.widthPixels
         g = GameView(this, w.toFloat(), h.toFloat(), this)
         setContentView(g)
+//        g!!.runThread()
+//        g!!.setOnClickListener { _ -> g!!.runThread()}
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -28,7 +29,7 @@ class GameActivity : AppCompatActivity() {
         return true
     }
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.getItemId()) {
+        when (item.itemId) {
             R.id.main_menu -> {
                 val it = Intent(this, MainActivity::class.java)
                 startActivity(it)
@@ -47,20 +48,4 @@ class GameActivity : AppCompatActivity() {
             else -> return super.onOptionsItemSelected(item)
         }
     }
-    private fun runThread() {
-        object : Thread() {
-            val metaknight = BitmapFactory.decodeResource(getResources(), R.drawable.metaknight);
-            override fun run() {
-                var i = 0
-                while (i++ < 1000) {
-                    runOnUiThread {
-
-                    }
-                    Thread.sleep(2000)
-                }
-            }
-        }.start()
-    }
-
-
 }

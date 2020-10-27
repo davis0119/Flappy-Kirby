@@ -9,80 +9,69 @@ import android.graphics.Color
 import android.graphics.Paint
 import android.os.Handler
 import android.view.MotionEvent
+import android.view.SurfaceHolder
 import android.view.View
-import kotlinx.android.synthetic.main.activity_game.view.*
 import java.util.*
+
 
 class GameView(context: Context?, w: Float, h: Float, a: Activity) : View(context) {
 
-    var timer : Timer
-    var timehandler : Handler
-    val act = a
-    val wide = w
-    val high = h
-    val kirby = BitmapFactory.decodeResource(getResources(), R.drawable.kirby_fly);
-    val metaknight = BitmapFactory.decodeResource(getResources(), R.drawable.metaknight);
-    val paint = Paint()
+//    private var timer : Timer
+//    private var timehandler : Handler
+    private val act = a
+    private val wide = w
+    private val high = h
+    private val kirby = BitmapFactory.decodeResource(getResources(), R.drawable.kirby_fly);
+    private val metaknight = BitmapFactory.decodeResource(getResources(), R.drawable.metaknight);
+    private val paint = Paint()
     // player x and y
-    var playerX = wide/6
-    var playerY = 5*high/7 + 60
+    private var playerX = wide/6
+    private var playerY = 5*high/7 + 60
     // obstacle x and y
-    var metaknightX = wide
-    var metaknightY = 5*high/7 + 40
-    var metaknightSpeed = 7
+    private var metaknightX = wide
+    private var metaknightY = 5*high/7 + 40
+    private var metaknightSpeed = 7
     // physics variables
-    var gravity = -1
-    var dy = 0
-    var metady = 0
+    private var gravity = -1
+    private var dy = 0
+    private var metady = 0
     // player score
-    var points = 0;
+    private var points = 0
+    private val holder: SurfaceHolder? = null
+
     init {
-        timer = Timer()
-        timehandler = Handler()
-        val timetask = object : TimerTask() {
-            override fun run() {
-                timehandler.post(Runnable {
-                    invalidate()
-                    if (checkCollision()) {
-                        // cut the cameras
-                        timer.cancel()
-                        val intent = Intent(context, NewPlayerStat::class.java)
-                        // pass in the points scored as an intent
-                        intent.putExtra("score", points)
-                        context!!.startActivity(intent)
-                    }
-                })
-            }
-        }
-        startTimer(timetask)
+        runThread()
     }
 
     private fun runThread() {
         object : Thread() {
-            val metaknight = BitmapFactory.decodeResource(getResources(), R.drawable.metaknight);
             override fun run() {
-                var i = 0
-                while (i++ < 1000) {
+                var run = true;
+                while (run) {
                     act.runOnUiThread {
-
+                        invalidate()
+                        if (checkCollision()) {
+                            // cut the cameras
+                            Thread.yield()
+                            run = false
+                        }
                     }
-                    Thread.sleep(2000)
+                    Thread.sleep(10)
                 }
+                val intent = Intent(context, NewPlayerStat::class.java)
+                // pass in the points scored as an intent
+                intent.putExtra("score", points)
+                context!!.startActivity(intent)
             }
         }.start()
     }
 
-    fun startTimer(task: TimerTask) {
-        timer = Timer()
-        timer.schedule(task, 1, 10)
-    }
-
-    override fun onDraw(canvas: Canvas?) {
+    public override fun onDraw(canvas: Canvas?) {
         super.onDraw(canvas)
-        paint.setColor(Color.parseColor("#000000"));
+        paint.color = Color.parseColor("#000000")
 
         canvas?.drawBitmap(kirby, playerX-80, playerY-160, paint)
-        paint.setColor(Color.parseColor("#f9a602"))
+        paint.color = Color.parseColor("#f9a602")
         canvas?.drawBitmap(metaknight, metaknightX-80, metaknightY-160, paint)
         // metaknight is going to the left faster
         metaknightX -= metaknightSpeed
@@ -129,7 +118,7 @@ class GameView(context: Context?, w: Float, h: Float, a: Activity) : View(contex
         return true
     }
 
-    fun jump() {
+    private fun jump() {
         dy = -35
         if (metady == 0) {
             metady = -10;
@@ -138,7 +127,7 @@ class GameView(context: Context?, w: Float, h: Float, a: Activity) : View(contex
         }
     }
 
-    fun Int.random(): Int {
+    private fun Int.random(): Int {
         val x = (10..this).random()
         return x
     }

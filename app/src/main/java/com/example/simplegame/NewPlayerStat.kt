@@ -4,6 +4,8 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_new_playerstat.*
@@ -18,6 +20,10 @@ class NewPlayerStat : AppCompatActivity() {
             if (name.text.toString() == "") {
                 Toast.makeText(this@NewPlayerStat,
                     "You must enter a name!",
+                    Toast.LENGTH_SHORT).show()
+            } else if (name.text.length > 12) {
+                Toast.makeText(this@NewPlayerStat,
+                    "Your name is a bit long...",
                     Toast.LENGTH_SHORT).show()
             } else {
                 val returnIntent = Intent()
@@ -41,6 +47,31 @@ class NewPlayerStat : AppCompatActivity() {
                 val i = Intent(this, LeaderboardActivity::class.java)
                 startActivity(i)
             }
+        }
+    }
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        val inflater = menuInflater
+        inflater.inflate(R.menu.menu, menu)
+        return true
+    }
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.main_menu -> {
+                val it = Intent(this, MainActivity::class.java)
+                startActivity(it)
+                return true
+            }
+            R.id.leaderboard -> {
+                val it = Intent(this, LeaderboardActivity::class.java)
+                startActivity(it)
+                return true
+            }
+            R.id.new_game -> {
+                val it = Intent(this, GameActivity::class.java)
+                startActivity(it)
+                return true
+            }
+            else -> return super.onOptionsItemSelected(item)
         }
     }
 }

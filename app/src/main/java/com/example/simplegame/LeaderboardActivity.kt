@@ -1,10 +1,11 @@
 package com.example.simplegame
 
 import android.app.Activity
+import android.app.AlertDialog
 import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
@@ -13,8 +14,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.activity_leaderboard.*
 
 class LeaderboardActivity : AppCompatActivity() {
-    private val PLAYER_STATS: ArrayList<PlayerStat> = ArrayList<PlayerStat>()
-    val ADD_NEW_PLAYER_STAT = 1
+    private val STATS: ArrayList<PlayerStat> = ArrayList()
+    val ADD_NEW_STAT = 1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,18 +27,39 @@ class LeaderboardActivity : AppCompatActivity() {
         playerStat_recycler_view.layoutManager = LinearLayoutManager(this)
 
         //adapter with click listener
-        playerStat_recycler_view.adapter = PlayerStatAdapter(this, PLAYER_STATS) {
+        playerStat_recycler_view.adapter = PlayerStatAdapter(this, STATS) {
             // display sole stat when clicked
             position ->
             val intent = Intent(this, PlayerStatActivity::class.java)
-            intent.putExtra("name", PLAYER_STATS[position].name)
-            intent.putExtra("score", PLAYER_STATS[position].score)
+            intent.putExtra("name", STATS[position].name)
+            intent.putExtra("score", STATS[position].score)
             startActivity(intent)
         }
         // go to reset confirmation screen
         reset.setOnClickListener {
-            val i = Intent(this, ResetActivity::class.java)
-            startActivity(i)
+            val builder:AlertDialog.Builder = AlertDialog.Builder(this)
+            builder.setTitle("Reset Leaderboard")
+            builder.setMessage("Are you sure you want to reset the leaderboard?")
+            builder.setPositiveButton(
+                "Reset", DialogInterface.OnClickListener { dialog, id ->
+                    val pref = this.getSharedPreferences("simplegame", Context.MODE_PRIVATE)
+                    val editor = pref.edit()
+                    editor.clear()
+                    editor.apply()
+                    val i = Intent(this, LeaderboardActivity::class.java)
+                    startActivity(i)
+                    dialog.dismiss()
+            })
+            builder.setNegativeButton(
+                "Oh, no I do not", DialogInterface.OnClickListener { dialog, id ->
+                    Toast.makeText(this,
+                        "It's all good but don't bother me again.",
+                        Toast.LENGTH_SHORT).show()
+                    dialog.dismiss()
+
+            })
+            val alertDialog: AlertDialog = builder.create()
+            alertDialog.show()
         }
     }
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -46,7 +68,7 @@ class LeaderboardActivity : AppCompatActivity() {
         return true
     }
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.getItemId()) {
+        when (item.itemId) {
             R.id.main_menu -> {
                 val it = Intent(this, MainActivity::class.java)
                 startActivity(it)
@@ -67,34 +89,32 @@ class LeaderboardActivity : AppCompatActivity() {
     }
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == ADD_NEW_PLAYER_STAT && resultCode ==
+        if (requestCode == ADD_NEW_STAT && resultCode ==
                     Activity.RESULT_OK && data != null) {
             // get the data and add it to the stats
             val name = data.getStringExtra("name")
             val score = data.getStringExtra("score")
             if (!name.isNullOrEmpty() && !score.isNullOrEmpty()) {
                 val stat = PlayerStat(name, score)
-                PLAYER_STATS.add(stat)
-                PLAYER_STATS.sortByDescending { stat -> stat.score.toInt() }
+                STATS.add(stat)
+                STATS.sortByDescending { stat -> stat.score.toInt() }
                 playerStat_recycler_view.adapter?.notifyDataSetChanged()
             }
         }
     }
     // function to get stuff from preferences, similar to getting values from intents
     private fun retrieveFromPreferences() {
-//        PLAYER_STATS.clear()
         val pref = this.getSharedPreferences("simplegame", Context.MODE_PRIVATE)
         val names = pref.getString("names", "")
-//        val score = pref.getString("score", "")
         if (names!!.isNotEmpty()) {
             val namesArr = names.split("|")
             for (name in namesArr) {
                 val score = pref.getString(name + "_score", "")
                 val newContact = PlayerStat(name, score!!)
-                PLAYER_STATS.add(newContact)
-                PLAYER_STATS.sortByDescending { stat -> stat.score.toInt() }
-                if (PLAYER_STATS.size > 7) {
-                    PLAYER_STATS.remove(PLAYER_STATS.get(7))
+                STATS.add(newContact)
+                STATS.sortByDescending { stat -> stat.score.toInt() }
+                if (STATS.size > 7) {
+                    STATS.remove(STATS[7])
                 }
             }
         }

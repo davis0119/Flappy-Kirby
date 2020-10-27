@@ -10,8 +10,9 @@
     <string name="score">Score: </string>
     <string name="currScore">0</string>
     <string name="save">Save</string>
-    <string name="confirmation">To reset, type CONFIRM here and click CONFIRM</string>
+    <string name="confirmation">Are you sure you want to confirm?</string>
     <string name="confirm">Confirm</string>
+    <string name="cancel">Oh, no I do not</string>
     <string name="back">Return</string>
     <string name="bestPlayers">Top 7 Players!</string>
 </resources>

@@ -11,7 +11,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="110dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="5dp"
         android:textSize="30sp"
         android:textStyle="bold"
         tools:text="@string/player_name" />
@@ -20,7 +20,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="5dp"
         android:textSize="25sp"
         android:textStyle="bold|italic"
         android:textColor="@color/prettyRed"

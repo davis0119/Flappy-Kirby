@@ -29,7 +29,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.getItemId()) {
+        when (item.itemId) {
             R.id.main_menu -> {
                 Toast.makeText(this, "You're already here!",
                     Toast.LENGTH_SHORT).show()
