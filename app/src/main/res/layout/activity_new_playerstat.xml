@@ -9,13 +9,20 @@
         android:layout_width="fill_parent"
         android:layout_height="120dp"
         android:hint="@string/player_name"
+        android:gravity="center"
+        android:textSize="35dp"
+        android:layout_marginTop="10dp"
         android:inputType="textPersonName" />
 
-    <EditText
+    <TextView
         android:id="@+id/score"
         android:layout_width="fill_parent"
         android:layout_height="120dp"
         android:hint="@string/score"
+        android:gravity="center"
+        android:textSize="30dp"
+        android:layout_marginTop="10dp"
+        android:background="@color/prettyRed"
         android:inputType="phone" />
 
     <Button
@@ -26,5 +33,5 @@
         android:background="@color/prettyGreen"
         android:gravity="center"
         android:text="@string/save"
-        android:textSize="20dp" />
+        android:textSize="25dp" />
 </LinearLayout>

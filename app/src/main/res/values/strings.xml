@@ -1,19 +1,17 @@
 <resources>
     <string name="app_name">simplegame</string>
-
     <string name="play">Play</string>
-
     <string name="thread">Thread</string>
-
     <string name="zero">0</string>
-
-    <string name="new_game">New_Game</string>
-
+    <string name="new_game">New Game</string>
     <string name="leaderboard">Leaderboard</string>
+    <string name="menu">Main Menu</string>
     <string name="player_name">Player Name</string>
-    <string name="score">Your Score: </string>
+    <string name="score">Score: </string>
+    <string name="currScore">0</string>
     <string name="save">Save</string>
     <string name="confirmation">To reset, type CONFIRM here and click CONFIRM</string>
     <string name="confirm">Confirm</string>
     <string name="back">Return</string>
+    <string name="bestPlayers">Top 7 Players!</string>
 </resources>

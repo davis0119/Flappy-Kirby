@@ -16,7 +16,6 @@ class MainActivity : AppCompatActivity() {
             val i = Intent(this, GameActivity::class.java)
             startActivity(i)
         }
-
         leaderboard.setOnClickListener{
             val j =  Intent(this, LeaderboardActivity::class.java)
             startActivity(j)
@@ -31,8 +30,19 @@ class MainActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.getItemId()) {
+            R.id.main_menu -> {
+                Toast.makeText(this, "You're already here!",
+                    Toast.LENGTH_SHORT).show()
+                return true
+            }
+            R.id.leaderboard -> {
+                val it = Intent(this, LeaderboardActivity::class.java)
+                startActivity(it)
+                return true
+            }
             R.id.new_game -> {
-                Toast.makeText(this, "New Game", Toast.LENGTH_SHORT).show()
+                val it = Intent(this, GameActivity::class.java)
+                startActivity(it)
                 return true
             }
             else -> return super.onOptionsItemSelected(item)

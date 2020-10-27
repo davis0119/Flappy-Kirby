@@ -20,30 +20,22 @@ class LeaderboardActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_leaderboard)
 
-//        addContactData() // deleting this gets rid of all contacts
-        retrieveFromPreferences() // use this instead of addContactData()
+        retrieveFromPreferences() // get persistent data
 
         // creates a vertical linear layout manager
         playerStat_recycler_view.layoutManager = LinearLayoutManager(this)
 
         //adapter with click listener
         playerStat_recycler_view.adapter = PlayerStatAdapter(this, PLAYER_STATS) {
-//            // do something when clicked
-//            position ->
-//            val intent = Intent(this, PlayerStatActivity::class.java)
-//            intent.putExtra("name", PLAYER_STATS[position].name)
-//            intent.putExtra("score", PLAYER_STATS[position].score)
-//            startActivity(intent)
-        }
-
-        // new contact fab button
-        new_playerstat.setOnClickListener {
-            val intent = Intent(this, NewPlayerStat::class.java)
-//            startActivityForResult(intent, ADD_NEW_PLAYER_STAT)
+            // display sole stat when clicked
+            position ->
+            val intent = Intent(this, PlayerStatActivity::class.java)
+            intent.putExtra("name", PLAYER_STATS[position].name)
+            intent.putExtra("score", PLAYER_STATS[position].score)
             startActivity(intent)
         }
+        // go to reset confirmation screen
         reset.setOnClickListener {
-//            clearLeaderboard()
             val i = Intent(this, ResetActivity::class.java)
             startActivity(i)
         }
@@ -55,8 +47,18 @@ class LeaderboardActivity : AppCompatActivity() {
     }
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.getItemId()) {
-            R.id.new_game -> {
+            R.id.main_menu -> {
                 val it = Intent(this, MainActivity::class.java)
+                startActivity(it)
+                return true
+            }
+            R.id.leaderboard -> {
+                Toast.makeText(this, "You're already here!",
+                    Toast.LENGTH_SHORT).show()
+                return true
+            }
+            R.id.new_game -> {
+                val it = Intent(this, GameActivity::class.java)
                 startActivity(it)
                 return true
             }
@@ -67,7 +69,7 @@ class LeaderboardActivity : AppCompatActivity() {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == ADD_NEW_PLAYER_STAT && resultCode ==
                     Activity.RESULT_OK && data != null) {
-            // do something with the data
+            // get the data and add it to the stats
             val name = data.getStringExtra("name")
             val score = data.getStringExtra("score")
             if (!name.isNullOrEmpty() && !score.isNullOrEmpty()) {
@@ -75,17 +77,15 @@ class LeaderboardActivity : AppCompatActivity() {
                 PLAYER_STATS.add(stat)
                 PLAYER_STATS.sortByDescending { stat -> stat.score.toInt() }
                 playerStat_recycler_view.adapter?.notifyDataSetChanged()
-                Log.d("added new stat", name)
             }
         }
     }
     // function to get stuff from preferences, similar to getting values from intents
     private fun retrieveFromPreferences() {
 //        PLAYER_STATS.clear()
-
         val pref = this.getSharedPreferences("simplegame", Context.MODE_PRIVATE)
         val names = pref.getString("names", "")
-        val score = pref.getString("score", "")
+//        val score = pref.getString("score", "")
         if (names!!.isNotEmpty()) {
             val namesArr = names.split("|")
             for (name in namesArr) {
@@ -98,12 +98,5 @@ class LeaderboardActivity : AppCompatActivity() {
                 }
             }
         }
-    }
-    private fun clearLeaderboard() {
-        val pref = this.getSharedPreferences("simplegame", Context.MODE_PRIVATE)
-        val editor = pref.edit()
-        editor.clear()
-        editor.apply()
-        finish()
     }
 }

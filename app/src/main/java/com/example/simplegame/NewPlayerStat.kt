@@ -7,16 +7,15 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_new_playerstat.*
-import kotlinx.android.synthetic.main.activity_reset.*
-import kotlinx.android.synthetic.main.playerstat_item.*
 
 class NewPlayerStat : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_new_playerstat)
+        score.text = intent.getIntExtra("score", 0).toString()
 
         save_stat.setOnClickListener {
-            if (name.text.toString().equals("")) {
+            if (name.text.toString() == "") {
                 Toast.makeText(this@NewPlayerStat,
                     "You must enter a name!",
                     Toast.LENGTH_SHORT).show()
@@ -24,22 +23,18 @@ class NewPlayerStat : AppCompatActivity() {
                 val returnIntent = Intent()
 
                 returnIntent.putExtra("name", name.text.toString())
-                returnIntent.putExtra("score", score.text.toString())
-
                 setResult(Activity.RESULT_OK, returnIntent)
                 // instead of using the intent, we can use shared preferences
                 // first arg is name of our file
                 val pref = this.getSharedPreferences("simplegame", Context.MODE_PRIVATE)
-                var allNames = pref.getString("names", "")
-                val name = name.text.toString()
+                val allNames = pref.getString("names", "")
+                val name = name.text.toString() + " "
                 val editor = pref.edit()
                 if (allNames!!.isEmpty()) {
                     editor.putString("names", name)
                 } else {
                     editor.putString("names", allNames + "|" + name)
-//                allNames += "|" + name
                 }
-//            editor.putString("names", allNames)
                 // allow us to put things into our preference file
                 editor.putString(name + "_score", score.text.toString())
                 editor.apply()

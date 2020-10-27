@@ -2,9 +2,19 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <item android:id="@+id/new_game"
-        android:icon="@drawable/baseline_menu_24"
-        android:title="@string/new_game"
+    <item android:id="@+id/main_menu"
+        android:icon="@drawable/baseline_home_24"
+        android:title="@string/menu"
         app:showAsAction="always"
+        />
+    <item android:id="@+id/leaderboard"
+        android:title="@string/leaderboard"
+        android:icon="@drawable/baseline_leaderboard_24"
+        app:showAsAction="never"
+        />
+    <item android:id="@+id/new_game"
+        android:icon="@drawable/baseline_home_24"
+        android:title="@string/new_game"
+        app:showAsAction="never"
         />
 </menu>
