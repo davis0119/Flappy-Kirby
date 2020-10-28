@@ -23,6 +23,7 @@ class LeaderboardActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_leaderboard)
+        // play da music
         mp = MediaPlayer.create(this, R.raw.kirby_leaderboard)
         mp.isLooping = true
         mp.setVolume(0.5f, 0.5f)
@@ -105,6 +106,7 @@ class LeaderboardActivity : AppCompatActivity() {
             val score = data.getStringExtra("score")
             if (!name.isNullOrEmpty() && !score.isNullOrEmpty()) {
                 val stat = PlayerStat(name, score)
+                // add the stat but sort it
                 STATS.add(stat)
                 STATS.sortByDescending { stat -> stat.score.toInt() }
                 playerStat_recycler_view.adapter?.notifyDataSetChanged()
@@ -122,6 +124,7 @@ class LeaderboardActivity : AppCompatActivity() {
                 val newContact = PlayerStat(name, score!!)
                 STATS.add(newContact)
                 STATS.sortByDescending { stat -> stat.score.toInt() }
+                // make sure the stats are not greater than 7
                 if (STATS.size > 7) {
                     STATS.remove(STATS[7])
                 }

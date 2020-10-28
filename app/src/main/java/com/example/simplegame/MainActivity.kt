@@ -14,12 +14,14 @@ class MainActivity : AppCompatActivity() {
     lateinit var mp: MediaPlayer
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        // play da music
         mp = MediaPlayer.create(this, R.raw.kirby_main_song)
         mp.isLooping = true
         mp.setVolume(0.5f, 0.5f)
         mp.start()
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        // stop the music when you go elsewhere
         game.setOnClickListener {
             mp.stop()
             val i = Intent(this, GameActivity::class.java)
@@ -39,6 +41,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        // stop the music when you click somewhere else on the menu
         when (item.itemId) {
             R.id.main_menu -> {
                 Toast.makeText(this, "You're already here!",

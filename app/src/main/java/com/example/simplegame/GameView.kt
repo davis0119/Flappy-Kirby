@@ -35,7 +35,10 @@ class GameView(context: Context?, w: Float, h: Float, a: Activity) : View(contex
     private var points = 0
     // music stuff
     lateinit var mp: MediaPlayer
-
+    // are we in the sky?
+    private var skyKnight = false;
+    // is the enemy above you?
+    private var isAbove = false;
     init {
         if (16.random() % 2 == 0) {
             setBackgroundResource(R.drawable.kirby_level)
@@ -43,7 +46,8 @@ class GameView(context: Context?, w: Float, h: Float, a: Activity) : View(contex
             metaknight =
                 BitmapFactory.decodeResource(getResources(), R.drawable.metaknight_fly)
             setBackgroundResource(R.drawable.kirby_sky)
-            metady = -20
+            metady = -5
+            skyKnight = true;
         }
         runThread()
     }
@@ -51,6 +55,7 @@ class GameView(context: Context?, w: Float, h: Float, a: Activity) : View(contex
     private fun runThread() {
         object : Thread() {
             override fun run() {
+                // play the music!!!
                 mp = MediaPlayer.create(cont, R.raw.kirby_music)
                 mp.isLooping = true
                 mp.setVolume(0.5f, 0.5f)
@@ -59,6 +64,7 @@ class GameView(context: Context?, w: Float, h: Float, a: Activity) : View(contex
                 while (run) {
                     act.runOnUiThread {
                         invalidate()
+                        // keep checking for collisions
                         if (checkCollision()) {
                             // cut the cameras
                             Thread.yield()
@@ -85,11 +91,37 @@ class GameView(context: Context?, w: Float, h: Float, a: Activity) : View(contex
         canvas?.drawBitmap(metaknight, metaknightX-80, metaknightY-160, paint)
         // metaknight is going to the left faster
         metaknightX -= metaknightSpeed
+        metaknightY += metady
         // how should the player's y coordinate be changing?
         playerY += dy
         dy -= 2 * gravity
-        metaknightY += metady
-        metady -= gravity
+        // check if enemy is above player
+        isAbove = metaknightY <= playerY
+
+        if (!skyKnight) {
+            metady -= gravity
+            // prevent metaknight from going off screen below
+            if (metaknightY >= 5 * high / 7 + 40) {
+                metaknightY = 5 * high / 7 + 40
+                metady = 0
+            }
+            // dont let the knight go too high
+            if (metaknightY <= 150) {
+                metaknightY = 150F
+                metady = 2
+            }
+        } else {
+            // prevent metaknight from going off screen below
+            if (metaknightY >= 5 * high / 8) {
+                metaknightY = 5 * high / 8
+                metady = 0
+            }
+            // dont let the knight go too high
+            if (metaknightY <= 150) {
+                metaknightY = 150F
+                metady = 2
+            }
+        }
         // prevent from going off screen below
         if (playerY >= 5 * high / 7 + 60) {
             playerY = 5 * high / 7 + 60
@@ -99,16 +131,7 @@ class GameView(context: Context?, w: Float, h: Float, a: Activity) : View(contex
         if (playerY <= 100) {
             playerY = 100F
         }
-        //prevent metaknight from going off screen below
-        if (metaknightY >= 5 * high / 7 + 40) {
-            metaknightY = 5 * high / 7 + 40
-            metady = 0
-        }
-        // dont let the knight go too high
-        if (metaknightY <= 150) {
-            metaknightY = 150F
-            metady = 2
-        }
+
         // regenerate metaknight after offscreen
         if (metaknightX < -1400) {
             points += 100
@@ -132,6 +155,13 @@ class GameView(context: Context?, w: Float, h: Float, a: Activity) : View(contex
         dy = -35
         if (metady == 0) {
             metady = -10
+        } else if (isAbove) {
+            // he may dive at you
+            if (20.random() % 2 == 0) {
+                metady += 7
+            } else {
+                metady -= 15.random()
+            }
         } else {
             metady -= 20.random()
         }
@@ -143,9 +173,9 @@ class GameView(context: Context?, w: Float, h: Float, a: Activity) : View(contex
 
     fun checkCollision(): Boolean {
         if ((playerY + 200 >= metaknightY - 200)
-            && (playerY - 200 <= metaknightY + 200)
+            && (playerY - 180 <= metaknightY + 180)
             && (playerX + 200 >= metaknightX - 200)
-            && (playerX - 200 <= metaknightX + 200)) {
+            && (playerX - 300 <= metaknightX + 200)) {
             return true
         }
         return false

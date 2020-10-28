@@ -9,7 +9,7 @@
     <string name="player_name">Player Name</string>
     <string name="score">Score: </string>
     <string name="currScore">0</string>
-    <string name="save">Save</string>
+    <string name="save">SAVE</string>
     <string name="confirmation">Are you sure you want to confirm?</string>
     <string name="confirm">Confirm</string>
     <string name="cancel">Oh, no I do not</string>

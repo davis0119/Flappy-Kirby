@@ -6,5 +6,7 @@
     <color name="prettyRed">#FFC3B4</color>
     <color name="prettyGreen">#B4FFC2</color>
     <color name="scoreGreen">#94FF7F</color>
+    <color name="white">#FFFFFF</color>
+    <color name="black">#000000</color>
 
 </resources>

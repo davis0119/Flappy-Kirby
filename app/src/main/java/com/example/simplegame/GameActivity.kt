@@ -28,6 +28,7 @@ class GameActivity : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        // wat on the menu do u want? stop the music tho
         when (item.itemId) {
             R.id.main_menu -> {
                 g?.mp?.stop()

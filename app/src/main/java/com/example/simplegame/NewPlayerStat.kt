@@ -6,6 +6,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.Button
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_new_playerstat.*
@@ -15,8 +16,9 @@ class NewPlayerStat : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_new_playerstat)
         score.text = intent.getIntExtra("score", 0).toString()
-
-        save_stat.setOnClickListener {
+        val buttonList = listOf<Button>(save_stat, save_also)
+        // can click the save text and the button
+        buttonList.map { button -> button.setOnClickListener {
             if (name.text.toString() == "") {
                 Toast.makeText(this@NewPlayerStat,
                     "You must enter a name!",
@@ -27,7 +29,6 @@ class NewPlayerStat : AppCompatActivity() {
                     Toast.LENGTH_SHORT).show()
             } else {
                 val returnIntent = Intent()
-
                 returnIntent.putExtra("name", name.text.toString())
                 setResult(Activity.RESULT_OK, returnIntent)
                 // instead of using the intent, we can use shared preferences
@@ -46,7 +47,7 @@ class NewPlayerStat : AppCompatActivity() {
                 editor.apply()
                 val i = Intent(this, LeaderboardActivity::class.java)
                 startActivity(i)
-            }
+            }}
         }
     }
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -55,6 +56,7 @@ class NewPlayerStat : AppCompatActivity() {
         return true
     }
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        // which menu item u picking
         when (item.itemId) {
             R.id.main_menu -> {
                 val it = Intent(this, MainActivity::class.java)
