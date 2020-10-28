@@ -1,6 +1,7 @@
 package com.example.simplegame
 
 import android.content.Intent
+import android.media.MediaPlayer
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
@@ -9,14 +10,23 @@ import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
+    // music stuff
+    lateinit var mp: MediaPlayer
+
     override fun onCreate(savedInstanceState: Bundle?) {
+        mp = MediaPlayer.create(this, R.raw.kirby_main_song)
+        mp.isLooping = true
+        mp.setVolume(0.5f, 0.5f)
+        mp.start()
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        button.setOnClickListener {
+        game.setOnClickListener {
+            mp.stop()
             val i = Intent(this, GameActivity::class.java)
             startActivity(i)
         }
         leaderboard.setOnClickListener{
+            mp.stop()
             val j =  Intent(this, LeaderboardActivity::class.java)
             startActivity(j)
         }
@@ -36,11 +46,13 @@ class MainActivity : AppCompatActivity() {
                 return true
             }
             R.id.leaderboard -> {
+                mp.stop()
                 val it = Intent(this, LeaderboardActivity::class.java)
                 startActivity(it)
                 return true
             }
             R.id.new_game -> {
+                mp.stop()
                 val it = Intent(this, GameActivity::class.java)
                 startActivity(it)
                 return true

@@ -9,9 +9,9 @@ import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.playerstat_item.view.*
 
 class PlayerStatAdapter(
-    var activity: Activity,
-    var playerList:List<PlayerStat>,
-    var getPosition:(Int) -> Unit) : RecyclerView.Adapter<PlayerStatViewHolder>() {
+    private var activity: Activity,
+    private var playerList:List<PlayerStat>,
+    private var getPosition:(Int) -> Unit) : RecyclerView.Adapter<PlayerStatViewHolder>() {
     // create new contacts
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PlayerStatViewHolder =
         PlayerStatViewHolder(
@@ -27,8 +27,8 @@ class PlayerStatAdapter(
     class PlayerStatViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
         var name: TextView = view.playerName
-        var score: TextView = view.playerScore
-        var view: View = view
+        private var score: TextView = view.playerScore
+        private var view: View = view
 
         // for binding player stats to view
         fun bind(item: PlayerStat, position: Int, getPosition: (Int) -> Unit) {

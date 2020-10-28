@@ -7,29 +7,25 @@ import android.graphics.BitmapFactory
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
-import android.os.Handler
+import android.media.MediaPlayer
 import android.view.MotionEvent
-import android.view.SurfaceHolder
 import android.view.View
-import java.util.*
 
 
 class GameView(context: Context?, w: Float, h: Float, a: Activity) : View(context) {
-
-//    private var timer : Timer
-//    private var timehandler : Handler
+    private val cont = context
     private val act = a
     private val wide = w
     private val high = h
-    private val kirby = BitmapFactory.decodeResource(getResources(), R.drawable.kirby_fly);
-    private val metaknight = BitmapFactory.decodeResource(getResources(), R.drawable.metaknight);
+    private var kirby = BitmapFactory.decodeResource(getResources(), R.drawable.kirby_fly)
+    private var metaknight = BitmapFactory.decodeResource(getResources(), R.drawable.metaknight)
     private val paint = Paint()
     // player x and y
     private var playerX = wide/6
     private var playerY = 5*high/7 + 60
     // obstacle x and y
-    private var metaknightX = wide
-    private var metaknightY = 5*high/7 + 40
+    private var metaknightX = wide + 40
+    private var metaknightY = 5*high/7 + 30
     private var metaknightSpeed = 7
     // physics variables
     private var gravity = -1
@@ -37,16 +33,29 @@ class GameView(context: Context?, w: Float, h: Float, a: Activity) : View(contex
     private var metady = 0
     // player score
     private var points = 0
-    private val holder: SurfaceHolder? = null
+    // music stuff
+    lateinit var mp: MediaPlayer
 
     init {
+        if (16.random() % 2 == 0) {
+            setBackgroundResource(R.drawable.kirby_level)
+        } else {
+            metaknight =
+                BitmapFactory.decodeResource(getResources(), R.drawable.metaknight_fly)
+            setBackgroundResource(R.drawable.kirby_sky)
+            metady = -20
+        }
         runThread()
     }
 
     private fun runThread() {
         object : Thread() {
             override fun run() {
-                var run = true;
+                mp = MediaPlayer.create(cont, R.raw.kirby_music)
+                mp.isLooping = true
+                mp.setVolume(0.5f, 0.5f)
+                mp.start()
+                var run = true
                 while (run) {
                     act.runOnUiThread {
                         invalidate()
@@ -58,6 +67,7 @@ class GameView(context: Context?, w: Float, h: Float, a: Activity) : View(contex
                     }
                     Thread.sleep(10)
                 }
+                mp.stop()
                 val intent = Intent(context, NewPlayerStat::class.java)
                 // pass in the points scored as an intent
                 intent.putExtra("score", points)
@@ -121,15 +131,14 @@ class GameView(context: Context?, w: Float, h: Float, a: Activity) : View(contex
     private fun jump() {
         dy = -35
         if (metady == 0) {
-            metady = -10;
+            metady = -10
         } else {
             metady -= 20.random()
         }
     }
 
     private fun Int.random(): Int {
-        val x = (10..this).random()
-        return x
+        return (10..this).random()
     }
 
     fun checkCollision(): Boolean {

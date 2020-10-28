@@ -5,6 +5,7 @@ import android.app.AlertDialog
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
+import android.media.MediaPlayer
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -15,12 +16,17 @@ import kotlinx.android.synthetic.main.activity_leaderboard.*
 
 class LeaderboardActivity : AppCompatActivity() {
     private val STATS: ArrayList<PlayerStat> = ArrayList()
-    val ADD_NEW_STAT = 1
+    private val ADD_NEW_STAT = 1
+    // music stuff
+    lateinit var mp: MediaPlayer
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_leaderboard)
-
+        mp = MediaPlayer.create(this, R.raw.kirby_leaderboard)
+        mp.isLooping = true
+        mp.setVolume(0.5f, 0.5f)
+        mp.start()
         retrieveFromPreferences() // get persistent data
 
         // creates a vertical linear layout manager
@@ -41,11 +47,12 @@ class LeaderboardActivity : AppCompatActivity() {
             builder.setTitle("Reset Leaderboard")
             builder.setMessage("Are you sure you want to reset the leaderboard?")
             builder.setPositiveButton(
-                "Reset", DialogInterface.OnClickListener { dialog, id ->
+                "Resetti Spaghetti", DialogInterface.OnClickListener { dialog, id ->
                     val pref = this.getSharedPreferences("simplegame", Context.MODE_PRIVATE)
                     val editor = pref.edit()
                     editor.clear()
                     editor.apply()
+                    mp.stop()
                     val i = Intent(this, LeaderboardActivity::class.java)
                     startActivity(i)
                     dialog.dismiss()
@@ -70,6 +77,7 @@ class LeaderboardActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.main_menu -> {
+                mp.stop()
                 val it = Intent(this, MainActivity::class.java)
                 startActivity(it)
                 return true
@@ -80,6 +88,7 @@ class LeaderboardActivity : AppCompatActivity() {
                 return true
             }
             R.id.new_game -> {
+                mp.stop()
                 val it = Intent(this, GameActivity::class.java)
                 startActivity(it)
                 return true

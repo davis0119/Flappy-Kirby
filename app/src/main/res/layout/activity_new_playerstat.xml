@@ -2,7 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="@color/prettyRed">
 
     <EditText
         android:id="@+id/name"
@@ -12,6 +13,10 @@
         android:gravity="center"
         android:textSize="35dp"
         android:layout_marginTop="10dp"
+        android:shadowColor="#000000"
+        android:shadowDx="1.5"
+        android:shadowDy="1.3"
+        android:shadowRadius="1.6"
         android:inputType="textPersonName" />
 
     <TextView
@@ -23,15 +28,24 @@
         android:textSize="30dp"
         android:layout_marginTop="10dp"
         android:background="@color/prettyRed"
+        android:shadowColor="#000000"
+        android:shadowDx="1.5"
+        android:shadowDy="1.3"
+        android:shadowRadius="1.6"
         android:inputType="phone" />
 
     <Button
         android:id="@+id/save_stat"
         android:layout_width="match_parent"
-        android:layout_height="300dp"
+        android:layout_height="200dp"
         android:layout_marginTop="15dp"
+        android:layout_marginHorizontal="40dp"
         android:background="@color/prettyGreen"
         android:gravity="center"
         android:text="@string/save"
+        android:shadowColor="#000000"
+        android:shadowDx="1.5"
+        android:shadowDy="1.3"
+        android:shadowRadius="1.6"
         android:textSize="25dp" />
 </LinearLayout>

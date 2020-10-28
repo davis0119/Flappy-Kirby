@@ -14,6 +14,10 @@
         android:layout_marginTop="5dp"
         android:textSize="30sp"
         android:textStyle="bold"
+        android:shadowColor="#000000"
+        android:shadowDx="1.5"
+        android:shadowDy="1.3"
+        android:shadowRadius="1.6"
         tools:text="@string/player_name" />
     <TextView
         android:id="@+id/playerScore"
@@ -22,7 +26,11 @@
         android:layout_marginStart="10dp"
         android:layout_marginTop="5dp"
         android:textSize="25sp"
-        android:textStyle="bold|italic"
-        android:textColor="@color/prettyRed"
+        android:textStyle="bold"
+        android:shadowColor="#000000"
+        android:shadowDx="1.5"
+        android:shadowDy="1.3"
+        android:shadowRadius="1.6"
+        android:textColor="@color/scoreGreen"
         tools:text="@string/currScore"/>
 </LinearLayout>
