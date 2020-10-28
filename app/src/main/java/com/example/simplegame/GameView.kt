@@ -36,11 +36,12 @@ class GameView(context: Context?, w: Float, h: Float, a: Activity) : View(contex
     // music stuff
     lateinit var mp: MediaPlayer
     // are we in the sky?
-    private var skyKnight = false;
+    private var skyKnight = false
     // is the enemy above you?
-    private var isAbove = false;
+    private var isAbove = false
+
     init {
-        if (16.random() % 2 == 0) {
+        if (11.random() % 2 == 0) {
             setBackgroundResource(R.drawable.kirby_level)
         } else {
             metaknight =
@@ -138,15 +139,13 @@ class GameView(context: Context?, w: Float, h: Float, a: Activity) : View(contex
             metaknightX = wide + 100
             // metaknight might swoop in from the sky and beat u up
             metaknightY = 2500.random().toFloat()
-            metaknightSpeed += 3
+            metaknightSpeed += 2
         }
     }
 
     override fun onTouchEvent(e: MotionEvent): Boolean {
         when (e.actionMasked) {
-            MotionEvent.ACTION_DOWN -> {}
             MotionEvent.ACTION_UP -> jump()
-            MotionEvent.ACTION_CANCEL -> {}
         }
         return true
     }
@@ -158,7 +157,7 @@ class GameView(context: Context?, w: Float, h: Float, a: Activity) : View(contex
         } else if (isAbove) {
             // he may dive at you
             if (20.random() % 2 == 0) {
-                metady += 7
+                metady += 6
             } else {
                 metady -= 15.random()
             }
